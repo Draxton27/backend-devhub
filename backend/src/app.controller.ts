@@ -1,12 +1,18 @@
+/* eslint-disable */
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { FirebaseService } from './firebase/firebase.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly firebaseService: FirebaseService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('test-firestore')
+  async testFirestore() {
+    const db = this.firebaseService.getFirestore();
+    const docRef = db.collection('test').doc('sampleDoc');
+    await docRef.set({ message: 'Firestore funcionando 🚀' });
+
+    const doc = await docRef.get();
+    return doc.data();
   }
 }

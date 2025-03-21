@@ -45,17 +45,14 @@ export class UserRepository {
 
   // find user by ID
   async findUserById(userId: string): Promise<User | null> {
-    console.log("UserId before fetching from Firestore:", JSON.stringify(userId));
     try {
       if (!userId || typeof userId !== 'string') {
-        console.log(userId);
         throw new Error("Invalid userId: userId is null or undefined.");
       }
       const userRef = this.collection.doc(userId);
       const userSnap = await userRef.get();
 
       const userData = userSnap.data() as User;
-      console.log("User found:", userData);
       return userData;
     } catch (error) {
       throw new Error(`Error fetching user: ${error.message}`);
