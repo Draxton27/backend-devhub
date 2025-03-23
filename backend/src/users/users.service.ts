@@ -1,12 +1,9 @@
 /* eslint-disable */
 
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { firestore } from '../utils/firebase';
 import { CreateUserDTO } from './dto/create-user-dto';
 import { LoginUserDTO } from './dto/login-user-dto';
 import { User } from './entities/user.entity';
-import { v4 as uuidv4 } from 'uuid';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from './repositories/user-repository';
 
@@ -22,23 +19,8 @@ export class UsersService {
         return this.userRepository.createUser(createUserDTO);
     }
 
-    async loginUser(loginUserDTO: LoginUserDTO) {
-      const user = await this.userRepository.findUserByEmail(loginUserDTO.email);
-      if (!user) {
-        throw new BadRequestException('Invalid credentials');
-      }
-
-      if (!user || !(await bcrypt.compare(loginUserDTO.password, user.password))) {
-        await new Promise((res) => setTimeout(res, 500));
-        throw new BadRequestException('Invalid credentials');
-      }
-      
-  
-      const id = await this.userRepository.updateLastLogin(user.id!);
-      return { message: 'User logged in successfully', id };
-    }
-
     async findUserById(userId: string): Promise<User | null> {
+      console.log(userId);
         return this.userRepository.findUserById(userId);
     }
 
