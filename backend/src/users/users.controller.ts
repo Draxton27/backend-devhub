@@ -17,7 +17,7 @@ export class UsersController {
         return this.usersService.createUser(createUserDTO);
     }
 
-    @Get('me')
+    @Post('me')
     async getMe(@Req() req, @Body() loginUserDTO: LoginUserDTO) {
         const uid = req.user?.uid;
         if (!uid) return { message: 'No user found' };
