@@ -27,17 +27,17 @@ export class UserRepository {
       //   throw new BadRequestException('User already exists');
       // }
 
-      const userRecord = await this.auth.createUser({
-        email: createUserDTO.email,
-        password: createUserDTO.password,
-        displayName: createUserDTO.name,
-      });
+      // const userRecord = await this.auth.createUser({
+      //   email: createUserDTO.email,
+      //   password: createUserDTO.password,
+      //   displayName: createUserDTO.name,
+      // });
       // hash password before
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(createUserDTO.password, saltRounds);
 
       const newUser: User = {
-        id: userRecord.uid,
+        id: createUserDTO.id,
         name: createUserDTO.name,
         email: createUserDTO.email,
         password: hashedPassword,
@@ -47,7 +47,7 @@ export class UserRepository {
         lastLogin: new Date(),
       };
 
-      await this.firestore.collection('users').doc(userRecord.uid).set(newUser);
+      await this.firestore.collection('users').doc(createUserDTO.id).set(newUser);
       return newUser;
     } catch (error) {
       throw new Error(`Error creating user: ${error.message}`);

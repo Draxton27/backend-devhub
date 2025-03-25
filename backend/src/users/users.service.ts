@@ -20,8 +20,7 @@ export class UsersService {
     }
 
     async findUserById(userId: string): Promise<User | null> {
-      console.log(userId);
-        return this.userRepository.findUserById(userId);
+      return this.userRepository.findUserById(userId);
     }
 
     async updateUser(updateData: Partial<User>): Promise<boolean> {
@@ -38,5 +37,14 @@ export class UsersService {
         throw new BadRequestException('User not found');
       }
       return this.userRepository.deleteUser(user.id!);
+    }
+
+    async checkpassword(password: string, userPassword: string): Promise<boolean> {
+      const isMatch = await bcrypt.compare(password, userPassword);
+      if (!isMatch) {
+        await new Promise((res) => setTimeout(res, 500));
+        throw new BadRequestException('Invalid credentials');
+      }
+      return isMatch;
     }
 }

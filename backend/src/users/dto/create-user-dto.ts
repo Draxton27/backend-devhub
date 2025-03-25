@@ -2,6 +2,10 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString, Min, MinLength } from '@nest
 export class CreateUserDTO{
     @IsString()
     @IsNotEmpty()
+    id: string;
+
+    @IsString()
+    @IsNotEmpty()
     name: string;
 
     @IsEmail()

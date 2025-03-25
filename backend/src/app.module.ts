@@ -26,7 +26,9 @@ export class AppModule {
         { path: 'users', method: RequestMethod.ALL },
         { path: 'posts', method: RequestMethod.ALL },
         { path: 'dashboard', method: RequestMethod.ALL },
-        { path: 'users/me', method: RequestMethod.GET }
+        { path: 'users/me', method: RequestMethod.GET },
+        { path: 'users/:id', method: RequestMethod.GET }
+
       );
   }
 }

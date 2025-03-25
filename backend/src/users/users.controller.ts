@@ -18,14 +18,18 @@ export class UsersController {
     }
 
     @Get('me')
-    async getMe(@Req() req) {
+    async getMe(@Req() req, @Body() loginUserDTO: LoginUserDTO) {
         const uid = req.user?.uid;
         if (!uid) return { message: 'No user found' };
 
         const user = await this.usersService.findUserById(uid);
+        if(!await this.usersService.checkpassword(loginUserDTO.password, user?.password!)) {
+            return new Error('Invalid Credentials')
+        }
         this.userRepository.updateLastLogin(uid);
         return user;
     }
+    
     @Get(':id')
     async findById(@Param() params: { id: string }) {
         const userId = params.id;
